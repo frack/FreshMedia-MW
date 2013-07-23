@@ -21,7 +21,6 @@
 	margin: 2.8em 0 0 12.2em;
 	padding: 0 1em 1em 1em;
 	position: relative;
-	z-index: 2;
 }
 #column-one {
 	padding-top: 160px;
@@ -659,10 +658,9 @@ table.rimage {
 */
 
 #p-logo {
+	position: absolute;
 	top: 0;
 	left: 0;
-	position: absolute; /*needed to use z-index */
-	z-index: 3;
 	height: 155px;
 	width: 12em;
 	overflow: visible;
@@ -683,10 +681,6 @@ table.rimage {
 /*
 ** Search portlet
 */
-#p-search {
-	position: relative;
-	z-index: 3;
-}
 input.searchButton {
 	margin-top: 1px;
 	font-size: 95%;
@@ -713,12 +707,6 @@ input.searchButton {
 ** the personal toolbar
 */
 #p-personal {
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 0;
-}
-#p-personal {
 	width: 100%;
 	white-space: nowrap;
 	padding: 0;
@@ -733,12 +721,11 @@ input.searchButton {
 }
 #p-personal .portlet,
 #p-personal .pBody {
-	z-index: 0;
-	padding: 0;
 	margin: 0;
+	padding: 0;
 	border: none;
-	overflow: visible;
 	background: none;
+	overflow: visible;
 }
 /* this is the ul contained in the portlet */
 #p-personal ul {
@@ -749,19 +736,17 @@ input.searchButton {
 	margin: 0;
 	text-align: right;
 	list-style: none;
-	z-index: 0;
 	background: none;
 	cursor: default;
 }
 #p-personal li {
-	z-index: 0;
-	border: none;
-	padding: 0;
 	display: inline;
-	color: #2f6fab;
 	margin-left: 1em;
-	line-height: 1.2em;
+	padding: 0;
+	border: none;
 	background: none;
+	line-height: 1.2em;
+	color: #2f6fab;
 }
 #p-personal li a {
 	text-decoration: none;
@@ -819,17 +804,15 @@ input.searchButton {
 	font-weight: bold;
 }
 #p-cactions li a {
+	position: relative;
+	margin: 0;
+	padding: 0 .8em .3em;
+	border: none;
 	background-color: #fbfbfb;
 	color: #002bb8;
-	border: none;
-	padding: 0 .8em .3em;
-	position: relative;
-	z-index: 0;
-	margin: 0;
 	text-decoration: none;
 }
 #p-cactions li.selected a {
-	z-index: 3;
 	padding: 0 1em .2em!important;
 	background-color: white;
 }
@@ -837,7 +820,6 @@ input.searchButton {
 	color: #ba0000;
 }
 #p-cactions li a:hover {
-	z-index: 3;
 	text-decoration: none;
 	background-color: white;
 }
@@ -855,12 +837,6 @@ input.searchButton {
 	padding-right: .4em;
 }
 /* offsets to distinguish the tab groups */
-li#ca-talk {
-	margin-right: 1.6em;
-}
-li#ca-watch, li#ca-unwatch, li#ca-varlang-0, li#ca-print {
-	margin-left: 1.6em;
-}
 #p-cactions .pBody {
 	font-size: 1em;
 	background-color: transparent;
@@ -874,11 +850,6 @@ li#ca-watch, li#ca-unwatch, li#ca-varlang-0, li#ca-print {
 }
 #p-cactions li a {
 	text-transform: lowercase;
-}
-
-#p-lang {
-	position: relative;
-	z-index: 3;
 }
 
 /* Override text-transform on languages where capitalization is significant */
@@ -954,7 +925,6 @@ li#ca-watch, li#ca-unwatch, li#ca-varlang-0, li#ca-print {
 	white-space: nowrap;
 	list-style-type: none;
 	list-style-image: none;
-	z-index: 3;
 }
 #preftoc li.selected {
 	font-weight: bold;
@@ -1303,14 +1273,4 @@ div.mw-lag-warn-high {
 	text-align: center;
 	vertical-align: middle;
 	font-size: 90%;
-}
-
-/* God-damned hack for the crappy layout */
-.os-suggest {
-	font-size: 127%;
-}
-
-/* Sometimes people don't want personal tools to be lowercase! */
-.no-text-transform {
-	text-transform: none;
 }
