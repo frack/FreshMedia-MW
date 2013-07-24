@@ -6,7 +6,7 @@
  * @file
  * @ingroup Skins
  * @author Elmer de Looff (elmer.delooff@gmail.com)
- * @license http://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution-ShareAlike 3.0 Unported License
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License, version 2
  */
 
 if( !defined( 'MEDIAWIKI' ) ) die( "This is an extension to the MediaWiki package and cannot be run standalone." );
