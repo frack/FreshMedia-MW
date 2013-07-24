@@ -13,7 +13,7 @@ $messages = array();
  */
 $messages['en'] = array(
     'skinname-freshmedia' => "FreshMedia",
-    'cavendishmw-desc' => "FreshMedia is a MediaWiki skin based on modern design ideas. It aims to provide
+    'freshmedia-desc' => "FreshMedia is a MediaWiki skin based on modern design ideas. It aims to provide
 a clean experience where blocks are separated by whitespace rather than borders.",
 );
 
@@ -22,6 +22,6 @@ a clean experience where blocks are separated by whitespace rather than borders.
  */
 $messages['nl'] = array(
     'skinname-freshmedia' => "FreshMedia",
-    'cavendishmw-desc' => "FreshMedia is een MediaWiki skin gebaseerd op moderne design-idee&euml;n. Het streeft
+    'freshmedia-desc' => "FreshMedia is een MediaWiki skin gebaseerd op moderne design-idee&euml;n. Het streeft
     naar een heldere interface waar blokken gescheiden worden door witruimte in plaats van randen.",
 );
