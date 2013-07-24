@@ -14,7 +14,7 @@ if( !defined( 'MEDIAWIKI' ) ) die( "This is an extension to the MediaWiki packag
 $wgExtensionCredits['skin'][] = array(
     'path' => __FILE__,
     'name' => 'FreshMedia',
-    'version' => '0.3.1',
+    'version' => '0.1',
     'url' => "https://github.com/frack/FreshMedia-MW",
     'author' => array('Elmer de Looff'),
     'descriptionmsg' => 'freshmedia-desc',
