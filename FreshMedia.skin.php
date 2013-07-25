@@ -66,25 +66,8 @@ class FreshMediaTemplate extends BaseTemplate {
 
         // Print the HTML head
         $this->html( 'headelement' );
+        $this->renderHeader();
 ?>
-
-<div id="container"> <!-- cavendishmw: s/globalWrapper/container/ -->
-    <div id="header" class="noprint">
-        <a name="top" id="contentTop"></a>
-        <h1>
-            <?php
-            $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
-            echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName );
-            ?>
-        </h1>
-
-        <!-- Content action buttons -->
-        <!-- <?php $this->cactions(); ?> -->
-
-        <!-- Search box -->
-        <?php $this->searchBox(); ?>
-    </div> <!-- End header div -->
-
     <div id="mBody">
         <div id="side" class="noprint" <?php $this->html('userlangattributes') ?>> <!-- cavendishmw: s/column-one/side/ -->
             <ul id="nav">
@@ -171,10 +154,29 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
 
+    function renderHeader() {
+    ?>
+    <header>
+      <div class="container noprint">
+          <h1 id="contentTop">
+              <?php
+              $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
+              echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName );
+              ?>
+          </h1>
+
+          <!-- Search box -->
+          <?php $this->searchBox(); ?>
+      </div>
+    </header>
+    <?php
+    }
+
+    /*************************************************************************************************/
     /**
      * @param $sidebar array
      */
-    protected function renderPortals( $sidebar ) {
+    function renderPortals( $sidebar ) {
         if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
         if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
         if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
