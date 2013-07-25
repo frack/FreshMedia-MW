@@ -175,7 +175,7 @@ class FreshMediaTemplate extends BaseTemplate {
           <?php $this->renderSearch(); ?>
         </div>
       </div>
-    <?php
+      <?php
     }
 
     /*************************************************************************************************/
@@ -247,12 +247,10 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function contentActions() {
       ?>
-        <ul>
-      <?php
-        foreach($this->data['content_actions'] as $key => $tab) {
-          echo "\n" . $this->makeListItem( $key, $tab );
-        }
-      ?>
+        <ul> <?php
+          foreach($this->data['content_actions'] as $key => $tab) {
+            echo "\n" . $this->makeListItem( $key, $tab );
+          } ?>
         </ul>
       <?php
     }
@@ -266,12 +264,10 @@ class FreshMediaTemplate extends BaseTemplate {
       <div class="user">
         <div class="container">
           <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
-          <ul class="userMenu" <?php $this->html('userlangattributes') ?>>
-            <?php
-              foreach($this->getPersonalTools() as $key => $item) {
-                  echo $this->makeListItem($key, $item);
-              }
-            ?>
+          <ul class="userMenu" <?php $this->html('userlangattributes') ?>> <?php
+            foreach($this->getPersonalTools() as $key => $item) {
+                echo $this->makeListItem($key, $item);
+            } ?>
           </ul>
         </div>
       </div>
@@ -285,13 +281,13 @@ class FreshMediaTemplate extends BaseTemplate {
       ?>
       <li><span><?php $this->msg('toolbox') ?></span>
         <ul>
-      <?php
-        foreach ( $this->getToolbox() as $key => $tbitem ) {
-          echo $this->makeListItem($key, $tbitem);
-        }
-        wfRunHooks( 'MonoBookTemplateToolboxEnd', array( &$this ) );
-        wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ) );
-      ?>
+          <?php
+            foreach ( $this->getToolbox() as $key => $tbitem ) {
+              echo $this->makeListItem($key, $tbitem);
+            }
+            wfRunHooks( 'MonoBookTemplateToolboxEnd', array( &$this ) );
+            wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ) );
+          ?>
         </ul>
       </li>
       <?php
@@ -305,12 +301,10 @@ class FreshMediaTemplate extends BaseTemplate {
       if( $this->data['language_urls'] ) {
         ?>
         <li><span><?php $this->msg('otherlanguages') ?></span>
-          <ul>
-            <?php
-              foreach($this->data['language_urls'] as $key => $langlink) {
-                echo $this->makeListItem($key, $langlink);
-              }
-            ?>
+          <ul> <?php
+            foreach($this->data['language_urls'] as $key => $langlink) {
+              echo $this->makeListItem($key, $langlink);
+            } ?>
           </ul>
         </li>
       <?php
@@ -327,14 +321,11 @@ class FreshMediaTemplate extends BaseTemplate {
       <li><span><?php $msg = wfMessage( $bar ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $bar ); ?></span>
       <?php
         if ( is_array( $cont ) ) { ?>
-          <ul>
-            <?php
-              foreach($cont as $key => $val) {
-                echo $this->makeListItem($key, $val);
-              }
-            ?>
-          </ul>
-      <?php
+          <ul> <?php
+            foreach($cont as $key => $val) {
+              echo $this->makeListItem($key, $val);
+            } ?>
+          </ul> <?php
         } else {
           # allow raw HTML block to be defined by extensions
           print $cont;
