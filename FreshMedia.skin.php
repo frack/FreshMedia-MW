@@ -58,86 +58,93 @@ class FreshMediaTemplate extends BaseTemplate {
      * Outputs the entire contents of the page
      */
     public function execute() {
-        // Suppress warnings to prevent notices about missing indexes in $this->data
-        wfSuppressWarnings();
+      // Suppress warnings to prevent notices about missing indexes in $this->data
+      wfSuppressWarnings();
 
-        // Print the HTML head
-        $this->html( 'headelement' );
-        $this->renderHeader();
-?>
-    <div id="mBody">
-        <div id="mainContent"> <!-- cavendishmw: s/column-content/mainContent/ -->
-            <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
+      // Print the HTML head
+      $this->html('headelement');
+      $this->renderHeader();
+      $this->renderContent();
+      $this->renderFooter();
+      $this->printTrail();
+      echo Html::closeElement( 'body' );
+      echo Html::closeElement( 'html' );
+      wfRestoreWarnings();
+    }
 
-            <h1 id="firstHeading" class="firstHeading" lang="<?php
-                $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
-                $this->html( 'pageLanguage' );
-            ?>"><span dir="auto"><?php $this->html('title') ?></span></h1>
-            <?php $this->contentActions(); ?>
-            <div id="bodyContent" class="mw-body">
-                <div id="siteSub"><?php $this->msg('tagline') ?></div>
-                <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div>
-            <?php if($this->data['undelete']) { ?>
-                <div id="contentSub2"><?php $this->html('undelete') ?></div>
-            <?php } ?><?php if($this->data['newtalk'] ) { ?>
-                <div class="usermessage"><?php $this->html('newtalk')  ?></div>
-            <?php } ?><?php if($this->data['showjumplinks']) { ?>
-                <div id="jump-to-nav" class="mw-jump"><?php $this->msg('jumpto') ?> <a href="#nav"><?php $this->msg('jumptonavigation') ?></a><?php $this->msg( 'comma-separator' ) ?><a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div>
-            <?php } ?>
+    function renderContent() {
+      ?>
+      <div id="mBody">
+          <div id="mainContent"> <!-- cavendishmw: s/column-content/mainContent/ -->
+              <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
-                <!-- start content -->
-                <?php $this->html('bodytext') ?>
-                <?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
-                <!-- end content -->
+              <h1 id="firstHeading" class="firstHeading" lang="<?php
+                  $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
+                  $this->html( 'pageLanguage' );
+              ?>"><span dir="auto"><?php $this->html('title') ?></span></h1>
+              <?php $this->contentActions(); ?>
+              <div id="bodyContent" class="mw-body">
+                  <div id="siteSub"><?php $this->msg('tagline') ?></div>
+                  <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div>
+              <?php if($this->data['undelete']) { ?>
+                  <div id="contentSub2"><?php $this->html('undelete') ?></div>
+              <?php } ?><?php if($this->data['newtalk'] ) { ?>
+                  <div class="usermessage"><?php $this->html('newtalk')  ?></div>
+              <?php } ?><?php if($this->data['showjumplinks']) { ?>
+                  <div id="jump-to-nav" class="mw-jump"><?php $this->msg('jumpto') ?> <a href="#nav"><?php $this->msg('jumptonavigation') ?></a><?php $this->msg( 'comma-separator' ) ?><a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div>
+              <?php } ?>
 
-                <?php if($this->data['dataAfterContent']) { $this->html ('dataAfterContent'); } ?>
-                <div class="visualClear"></div>
-            </div>
-        </div> <!-- /mainContent -->
-    </div> <!-- /mBody -->
+                  <!-- start content -->
+                  <?php $this->html('bodytext') ?>
+                  <?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
+                  <!-- end content -->
 
-    <div class="visualClear"></div>
-    <?php
-        $validFooterIcons = $this->getFooterIcons( "icononly" );
-        $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links
+                  <?php if($this->data['dataAfterContent']) { $this->html ('dataAfterContent'); } ?>
+                  <div class="visualClear"></div>
+              </div>
+          </div> <!-- /mainContent -->
+      </div> <!-- /mBody -->
+      <?php
+    }
 
-        if ( count( $validFooterIcons ) + count( $validFooterLinks ) > 0 ) { ?>
-    <div id="footer" role="contentinfo"<?php $this->html('userlangattributes') ?>>
-    <?php
-            $footerEnd = '</div>';
-        } else {
-            $footerEnd = '';
-        }
-        foreach ( $validFooterIcons as $blockName => $footerIcons ) { ?>
+    function renderFooter() {
+      $validFooterIcons = $this->getFooterIcons( "icononly" );
+      $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links
+
+      if ( count( $validFooterIcons ) + count( $validFooterLinks ) > 0 ) {
+        ?>
+          <div id="footer" role="contentinfo"<?php $this->html('userlangattributes') ?>>
+        <?php
+        $footerEnd = '</div>';
+      } else {
+        $footerEnd = '';
+      }
+      foreach ( $validFooterIcons as $blockName => $footerIcons ) { ?>
         <div id="f-<?php echo htmlspecialchars($blockName); ?>ico">
-    <?php foreach ( $footerIcons as $icon ) { ?>
-            <?php echo $this->getSkin()->makeFooterIcon( $icon ); ?>
-
-    <?php }
-    ?>
+          <?php
+            foreach ( $footerIcons as $icon ) {
+              echo $this->getSkin()->makeFooterIcon( $icon );
+            }
+          ?>
         </div>
-    <?php }
-
-            if ( count( $validFooterLinks ) > 0 ) {
-    ?>    <ul id="f-list">
-    <?php
-                foreach( $validFooterLinks as $aLink ) { ?>
+        <?php
+      }
+      if ( count( $validFooterLinks ) > 0 ) {
+        ?>
+          <ul id="f-list">
+        <?php
+          foreach( $validFooterLinks as $aLink ) { ?>
             <li id="<?php echo $aLink ?>"><?php $this->html($aLink) ?></li>
-    <?php
-                }
-    ?>
+            <?php
+          }
+        ?>
         </ul>
-    <?php    }
-    echo $footerEnd;
-    ?>
-
-    </div>
-<?php
-        $this->printTrail();
-        echo Html::closeElement( 'body' );
-        echo Html::closeElement( 'html' );
-        wfRestoreWarnings();
-    } // end of execute() method
+      <?php    }
+      echo $footerEnd;
+      ?>
+        </div>
+      <?php
+    } // end of renderFooter() method
 
     /*************************************************************************************************/
 
@@ -152,7 +159,6 @@ class FreshMediaTemplate extends BaseTemplate {
         $this->renderUserMenu();
         $this->renderTitle();
         $this->renderPortals($this->data['sidebar']);
-        $this->renderSearch();
         ?>
       </header>
     <?php
@@ -164,7 +170,7 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function renderTitle() {
       ?>
-      <div class="headerTitle">
+      <div class="title">
         <div class="container">
           <h1 id="contentTop">
             <?php
@@ -188,7 +194,7 @@ class FreshMediaTemplate extends BaseTemplate {
       if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
       if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
       ?>
-      <div class="headerMainMenu">
+      <div class="menu">
         <div class="container">
           <ul class="mainMenu">
           <?php
@@ -264,7 +270,7 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function renderUserMenu() {
       ?>
-      <div class="headerUserMenu">
+      <div class="user">
         <div class="container">
           <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
           <ul class="userMenu" <?php $this->html('userlangattributes') ?>>
