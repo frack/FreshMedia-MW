@@ -190,24 +190,26 @@ class FreshMediaTemplate extends BaseTemplate {
       ?>
       <div class="headerMainMenu">
         <div class="container">
-        <?php
-          foreach( $sidebar as $boxName => $content ) {
-            if ( $content === false )
-              continue;
+          <ul class="mainMenu">
+          <?php
+            foreach( $sidebar as $boxName => $content ) {
+              if ( $content === false )
+                continue;
 
-            if ( $boxName == 'SEARCH' ) {
-              // The searchbox is disabled, because we already have one in the header.
-              // Uncomment the line below to enable it again.
-              //$this->renderSearch();
-            } elseif ( $boxName == 'TOOLBOX' ) {
-              $this->toolbox();
-            } elseif ( $boxName == 'LANGUAGES' ) {
-              $this->languageBox();
-            } else {
-              $this->customBox( $boxName, $content );
+              if ( $boxName == 'SEARCH' ) {
+                // The searchbox is disabled, because we already have one in the header.
+                // Uncomment the line below to enable it again.
+                //$this->renderSearch();
+              } elseif ( $boxName == 'TOOLBOX' ) {
+                $this->toolbox();
+              } elseif ( $boxName == 'LANGUAGES' ) {
+                $this->languageBox();
+              } else {
+                $this->customBox( $boxName, $content );
+              }
             }
-          }
-        ?>
+          ?>
+          </ul>
         </div>
       </div>
       <?php
