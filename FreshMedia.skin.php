@@ -37,6 +37,7 @@ class SkinFreshMedia extends SkinTemplate {
      * @param $out OutputPage object
      */
     function setupSkinUserCss( OutputPage $out ) {
+        global $wgHandheldStyle;
         parent::setupSkinUserCss( $out );
         $out->addModuleStyles( 'skins.freshmedia' );
 		    if( $wgHandheldStyle ) {
@@ -57,10 +58,6 @@ class FreshMediaTemplate extends BaseTemplate {
      * Outputs the entire contents of the page
      */
     public function execute() {
-        global $freshMediaSitename, $wgHandheldStyle;
-
-        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
-
         // Suppress warnings to prevent notices about missing indexes in $this->data
         wfSuppressWarnings();
 
@@ -72,8 +69,6 @@ class FreshMediaTemplate extends BaseTemplate {
         <div id="side" class="noprint" <?php $this->html('userlangattributes') ?>> <!-- cavendishmw: s/column-one/side/ -->
             <ul id="nav">
                 <?php
-                // Display Personal tools.
-                $this->personalTools();
                 // Display other Navigation blocks.
                 $this->renderPortals( $this->data['sidebar'] );
                 ?>
@@ -86,7 +81,8 @@ class FreshMediaTemplate extends BaseTemplate {
             <h1 id="firstHeading" class="firstHeading" lang="<?php
                 $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
                 $this->html( 'pageLanguage' );
-            ?>"><span dir="auto"><?php $this->html('title') ?></span></h1><?php $this->cactions(); ?>
+            ?>"><span dir="auto"><?php $this->html('title') ?></span></h1>
+            <?php $this->contentActions(); ?>
             <div id="bodyContent" class="mw-body">
                 <div id="siteSub"><?php $this->msg('tagline') ?></div>
                 <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div>
@@ -155,9 +151,15 @@ class FreshMediaTemplate extends BaseTemplate {
     /*************************************************************************************************/
 
     function renderHeader() {
-    ?>
-    <header>
+        global $freshMediaSitename;
+        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
+        ?>
+    <header class="mainHeader">
       <div class="container noprint">
+          <?php
+          // Display Personal tools.
+          $this->renderUserMenu();
+          ?>
           <h1 id="contentTop">
               <?php
               $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
@@ -221,10 +223,11 @@ class FreshMediaTemplate extends BaseTemplate {
 <?php
     }
 
+    /*************************************************************************************************/
     /**
-     * Prints the cactions bar.
+     * Prints the content-actions menu.
      */
-    function cactions() {
+    function contentActions() {
 ?>
         <ul><?php
             foreach($this->data['content_actions'] as $key => $tab) {
@@ -236,21 +239,26 @@ class FreshMediaTemplate extends BaseTemplate {
 <?php
     }
 
+    /*************************************************************************************************/
     /**
      * Prints the personal tools.
      */
-    function personalTools() {
+    function renderUserMenu() {
 ?>
-        <li><span><?php $this->msg('personaltools') ?></span>
-            <ul<?php $this->html('userlangattributes') ?>>
-            <?php foreach($this->getPersonalTools() as $key => $item) { ?>
-                <?php echo $this->makeListItem($key, $item); ?>
-            <?php } ?>
-            </ul>
-        </li>
+        <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
+        <ul class="userMenu" <?php $this->html('userlangattributes') ?>>
+            <?php
+            foreach($this->getPersonalTools() as $key => $item) {
+                echo $this->makeListItem($key, $item);
+            }
+            ?>
+        </ul>
 <?php
     }
     /*************************************************************************************************/
+    /**
+     * Prints the toolbox.
+     */
     function toolbox() {
 ?>
     <li><span><?php $this->msg('toolbox') ?></span>
@@ -270,6 +278,9 @@ class FreshMediaTemplate extends BaseTemplate {
     }
 
     /*************************************************************************************************/
+    /**
+     * Prints the Language selection menu.
+     */
     function languageBox() {
         if( $this->data['language_urls'] ) {
 ?>
