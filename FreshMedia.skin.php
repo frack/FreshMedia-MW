@@ -66,15 +66,6 @@ class FreshMediaTemplate extends BaseTemplate {
         $this->renderHeader();
 ?>
     <div id="mBody">
-        <div id="side" class="noprint" <?php $this->html('userlangattributes') ?>> <!-- cavendishmw: s/column-one/side/ -->
-            <ul id="nav">
-                <?php
-                // Display other Navigation blocks.
-                $this->renderPortals( $this->data['sidebar'] );
-                ?>
-            </ul> <!-- /nav -->
-        </div> <!-- /side -->
-
         <div id="mainContent"> <!-- cavendishmw: s/column-content/mainContent/ -->
             <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
@@ -151,26 +142,40 @@ class FreshMediaTemplate extends BaseTemplate {
     /*************************************************************************************************/
 
     function renderHeader() {
-        global $freshMediaSitename;
-        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
-        ?>
-    <header class="mainHeader">
-      <div class="container noprint">
-          <?php
-          // Display Personal tools.
-          $this->renderUserMenu();
-          ?>
-          <h1 id="contentTop">
-              <?php
-              $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
-              echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName );
-              ?>
-          </h1>
+      global $freshMediaSitename;
+      $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
+      ?>
 
+      <header class="mainHeader noprint">
+        <?php
+        // Display Personal tools.
+        $this->renderUserMenu();
+        $this->renderTitle();
+        $this->renderPortals($this->data['sidebar']);
+        $this->renderSearch();
+        ?>
+      </header>
+    <?php
+    }
+
+    /*************************************************************************************************/
+    /**
+     * Render title block
+     */
+    function renderTitle() {
+      ?>
+      <div class="headerTitle">
+        <div class="container">
+          <h1 id="contentTop">
+            <?php
+            $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
+            echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName );
+            ?>
+          </h1>
           <!-- Search box -->
-          <?php $this->searchBox(); ?>
+          <?php $this->renderSearch(); ?>
+        </div>
       </div>
-    </header>
     <?php
     }
 
@@ -179,48 +184,60 @@ class FreshMediaTemplate extends BaseTemplate {
      * @param $sidebar array
      */
     function renderPortals( $sidebar ) {
-        if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
-        if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
-        if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
-
-        foreach( $sidebar as $boxName => $content ) {
+      if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
+      if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
+      if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
+      ?>
+      <div class="headerMainMenu">
+        <div class="container">
+        <?php
+          foreach( $sidebar as $boxName => $content ) {
             if ( $content === false )
-                continue;
+              continue;
 
             if ( $boxName == 'SEARCH' ) {
-                // The searchbox is disabled, because we already have one in the header.
-                // Uncomment the line below to enable it again.
-                //$this->searchBox();
+              // The searchbox is disabled, because we already have one in the header.
+              // Uncomment the line below to enable it again.
+              //$this->renderSearch();
             } elseif ( $boxName == 'TOOLBOX' ) {
-                $this->toolbox();
+              $this->toolbox();
             } elseif ( $boxName == 'LANGUAGES' ) {
-                $this->languageBox();
+              $this->languageBox();
             } else {
-                $this->customBox( $boxName, $content );
+              $this->customBox( $boxName, $content );
             }
-        }
+          }
+        ?>
+        </div>
+      </div>
+      <?php
     }
 
+    /*************************************************************************************************/
     /**
      * Prints the search box.
      */
-    function searchBox() {
-        global $wgUseTwoButtonsSearchForm;
-?>
-    <form action="<?php $this->text('wgScript') ?>" id="searchform">
+    function renderSearch() {
+      global $wgUseTwoButtonsSearchForm;
+      ?>
+      <form action="<?php $this->text('wgScript') ?>" id="searchform">
         <label for="searchInput"><?php $this->msg('search') ?></label>
         <input type='hidden' name="title" value="<?php $this->text('searchtitle') ?>"/>
-        <?php echo $this->makeSearchInput(array( "id" => "searchInput" )); ?>
-
-        <?php echo $this->makeSearchButton("go", array( "id" => "searchGoButton", "class" => "searchButton" ));
-        if ($wgUseTwoButtonsSearchForm): ?>&#160;
-        <?php echo $this->makeSearchButton("fulltext", array( "id" => "mw-searchButton", "class" => "searchButton" ));
-        else: ?>
-
-        <div><a href="<?php $this->text('searchaction') ?>" rel="search"><?php $this->msg('powersearch-legend') ?></a></div><?php
-        endif; ?>
-    </form>
-<?php
+        <?php
+          echo $this->makeSearchInput(array( "id" => "searchInput" ));
+          echo $this->makeSearchButton("go", array( "id" => "searchGoButton", "class" => "searchButton" ));
+          if ($wgUseTwoButtonsSearchForm):
+        ?>&#160;
+        <?php
+          echo $this->makeSearchButton("fulltext", array( "id" => "mw-searchButton", "class" => "searchButton" ));
+          else:
+        ?>
+          <div><a href="<?php $this->text('searchaction') ?>" rel="search"><?php $this->msg('powersearch-legend') ?></a></div>
+        <?php
+          endif;
+        ?>
+      </form>
+      <?php
     }
 
     /*************************************************************************************************/
@@ -228,15 +245,15 @@ class FreshMediaTemplate extends BaseTemplate {
      * Prints the content-actions menu.
      */
     function contentActions() {
-?>
-        <ul><?php
-            foreach($this->data['content_actions'] as $key => $tab) {
-                echo '
-            ' . $this->makeListItem( $key, $tab );
-            } ?>
-
+      ?>
+        <ul>
+      <?php
+        foreach($this->data['content_actions'] as $key => $tab) {
+          echo "\n" . $this->makeListItem( $key, $tab );
+        }
+      ?>
         </ul>
-<?php
+      <?php
     }
 
     /*************************************************************************************************/
@@ -244,37 +261,39 @@ class FreshMediaTemplate extends BaseTemplate {
      * Prints the personal tools.
      */
     function renderUserMenu() {
-?>
-        <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
-        <ul class="userMenu" <?php $this->html('userlangattributes') ?>>
+      ?>
+      <div class="headerUserMenu">
+        <div class="container">
+          <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
+          <ul class="userMenu" <?php $this->html('userlangattributes') ?>>
             <?php
-            foreach($this->getPersonalTools() as $key => $item) {
-                echo $this->makeListItem($key, $item);
-            }
+              foreach($this->getPersonalTools() as $key => $item) {
+                  echo $this->makeListItem($key, $item);
+              }
             ?>
-        </ul>
-<?php
+          </ul>
+        </div>
+      </div>
+      <?php
     }
     /*************************************************************************************************/
     /**
      * Prints the toolbox.
      */
     function toolbox() {
-?>
-    <li><span><?php $this->msg('toolbox') ?></span>
+      ?>
+      <li><span><?php $this->msg('toolbox') ?></span>
         <ul>
-<?php
-        foreach ( $this->getToolbox() as $key => $tbitem ) { ?>
-                <?php echo $this->makeListItem($key, $tbitem); ?>
-
-<?php
+      <?php
+        foreach ( $this->getToolbox() as $key => $tbitem ) {
+          echo $this->makeListItem($key, $tbitem);
         }
         wfRunHooks( 'MonoBookTemplateToolboxEnd', array( &$this ) );
         wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ) );
-?>
+      ?>
         </ul>
-    </li>
-<?php
+      </li>
+      <?php
     }
 
     /*************************************************************************************************/
@@ -282,18 +301,19 @@ class FreshMediaTemplate extends BaseTemplate {
      * Prints the Language selection menu.
      */
     function languageBox() {
-        if( $this->data['language_urls'] ) {
-?>
-    <li><span><?php $this->msg('otherlanguages') ?></span>
-        <ul>
-<?php        foreach($this->data['language_urls'] as $key => $langlink) { ?>
-                <?php echo $this->makeListItem($key, $langlink); ?>
-
-<?php        } ?>
-        </ul>
-    </li>
-<?php
-        }
+      if( $this->data['language_urls'] ) {
+        ?>
+        <li><span><?php $this->msg('otherlanguages') ?></span>
+          <ul>
+            <?php
+              foreach($this->data['language_urls'] as $key => $langlink) {
+                echo $this->makeListItem($key, $langlink);
+              }
+            ?>
+          </ul>
+        </li>
+      <?php
+      }
     }
 
     /*************************************************************************************************/
@@ -302,21 +322,24 @@ class FreshMediaTemplate extends BaseTemplate {
      * @param $cont array|string
      */
     function customBox( $bar, $cont ) {
-?>
-        <li><span><?php $msg = wfMessage( $bar ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $bar ); ?></span>
-<?php   if ( is_array( $cont ) ) { ?>
-            <ul>
-<?php             foreach($cont as $key => $val) { ?>
-                <?php echo $this->makeListItem($key, $val); ?>
-
-<?php            } ?>
-            </ul>
-<?php   } else {
-            # allow raw HTML block to be defined by extensions
-            print $cont;
+      ?>
+      <li><span><?php $msg = wfMessage( $bar ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $bar ); ?></span>
+      <?php
+        if ( is_array( $cont ) ) { ?>
+          <ul>
+            <?php
+              foreach($cont as $key => $val) {
+                echo $this->makeListItem($key, $val);
+              }
+            ?>
+          </ul>
+      <?php
+        } else {
+          # allow raw HTML block to be defined by extensions
+          print $cont;
         }
-?>
-        </li>
-<?php
+      ?>
+      </li>
+      <?php
     }
 } // end of class

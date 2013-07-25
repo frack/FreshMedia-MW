@@ -22,9 +22,6 @@
 	padding: 0 1em 1em 1em;
 	position: relative;
 }
-#column-one {
-	padding-top: 160px;
-}
 #content {
 	background: white;
 	color: black;
@@ -1077,11 +1074,6 @@ div#userloginForm .captcha {
 /* Mac IE 5.0 fix; floated content turns invisible */
 * > html #column-content {
 	float: none;
-}
-* > html #column-one {
-	position: absolute;
-	left: 0;
-	top: 0;
 }
 * > html #footer {
 	margin-left: 13.2em;
