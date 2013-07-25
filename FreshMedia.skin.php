@@ -110,39 +110,32 @@ class FreshMediaTemplate extends BaseTemplate {
     function renderFooter() {
       $validFooterIcons = $this->getFooterIcons( "icononly" );
       $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links
-
-      if ( count( $validFooterIcons ) + count( $validFooterLinks ) > 0 ) {
-        ?>
-          <div id="footer" role="contentinfo"<?php $this->html('userlangattributes') ?>>
+      ?>
+      <footer role="contentinfo"<?php $this->html('userlangattributes') ?>>
+        <div class="container">
         <?php
-        $footerEnd = '</div>';
-      } else {
-        $footerEnd = '';
-      }
-      foreach ( $validFooterIcons as $blockName => $footerIcons ) { ?>
-        <div id="f-<?php echo htmlspecialchars($blockName); ?>ico">
-          <?php
-            foreach ( $footerIcons as $icon ) {
-              echo $this->getSkin()->makeFooterIcon( $icon );
-            }
-          ?>
-        </div>
-        <?php
-      }
-      if ( count( $validFooterLinks ) > 0 ) {
-        ?>
-          <ul id="f-list">
-        <?php
-          foreach( $validFooterLinks as $aLink ) { ?>
-            <li id="<?php echo $aLink ?>"><?php $this->html($aLink) ?></li>
-            <?php
+          foreach ( $validFooterIcons as $blockName => $footerIcons ) { ?>
+            <div id="f-<?php echo htmlspecialchars($blockName); ?>ico">
+              <?php
+                foreach ( $footerIcons as $icon ) {
+                  echo $this->getSkin()->makeFooterIcon( $icon );
+                }
+              ?>
+            </div><?php
+          }
+          if ( count( $validFooterLinks ) > 0 ) { ?>
+            <ul id="f-list">
+              <?php
+                foreach( $validFooterLinks as $aLink ) { ?>
+                  <li id="<?php echo $aLink ?>"><?php $this->html($aLink) ?></li>
+                  <?php
+                }
+              ?>
+            </ul><?php
           }
         ?>
-        </ul>
-      <?php    }
-      echo $footerEnd;
-      ?>
         </div>
+      </footer>
       <?php
     } // end of renderFooter() method
 
@@ -172,7 +165,7 @@ class FreshMediaTemplate extends BaseTemplate {
       ?>
       <div class="title">
         <div class="container">
-          <h1 id="contentTop">
+          <h1>
             <?php
             $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
             echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName );
