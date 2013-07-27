@@ -38,12 +38,9 @@ class SkinFreshMedia extends SkinTemplate {
      */
     function setupSkinUserCss( OutputPage $out ) {
         global $wgHandheldStyle;
+        // Delegate to parent to include legacy shared and print modules
         parent::setupSkinUserCss( $out );
         $out->addModuleStyles( 'skins.freshmedia' );
-		    if( $wgHandheldStyle ) {
-			      // Currently in testing... try 'chick/main.css'
-			      $out->addStyle( $wgHandheldStyle, 'handheld' );
-		    }
     }
 }
 
