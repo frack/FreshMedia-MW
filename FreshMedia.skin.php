@@ -70,8 +70,8 @@ class FreshMediaTemplate extends BaseTemplate {
     }
 
     function renderContent() {
-        $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
-        ?>
+        $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode(); ?>
+
         <div class="main-content">
             <div class="container"> <?php
                 if($this->data['sitenotice']) { ?>
@@ -104,8 +104,7 @@ class FreshMediaTemplate extends BaseTemplate {
                     ?>
                 </div> <!-- /bodyContent -->
             </div> <!-- /container -->
-        </div> <!-- /main-content -->
-        <?php
+        </div> <!-- /main-content --> <?php
     }
 
     /*************************************************************************************************/
@@ -114,11 +113,10 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function renderFooter() {
         $validFooterIcons = $this->getFooterIcons( "icononly" );
-        $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links
-        ?>
+        $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links ?>
+
         <footer role="contentinfo"<?php $this->html('userlangattributes') ?>>
-            <div class="container">
-            <?php
+            <div class="container"> <?php
                 foreach ( $validFooterIcons as $blockName => $footerIcons ) { ?>
                     <div id="f-<?php echo htmlspecialchars($blockName); ?>ico">
                         <?php
@@ -137,11 +135,9 @@ class FreshMediaTemplate extends BaseTemplate {
                             }
                         ?>
                     </ul><?php
-                }
-            ?>
+                } ?>
             </div>
-        </footer>
-        <?php
+        </footer> <?php
     } // end of renderFooter() method
 
     /*************************************************************************************************/
@@ -150,23 +146,20 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function renderHeader() {
         global $freshMediaSitename;
-        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
-        ?>
+        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename']; ?>
 
         <header class="mainHeader noprint"> <?php
             $this->renderUserMenu();
             $this->renderTitle();
             $this->renderPortals($this->data['sidebar']); ?>
-        </header>
-        <?php
+        </header> <?php
     }
 
     /*************************************************************************************************/
     /**
      * Render title block
      */
-    function renderTitle() {
-        ?>
+    function renderTitle() { ?>
         <div class="title">
             <div class="container">
                 <h1> <?php
@@ -176,8 +169,7 @@ class FreshMediaTemplate extends BaseTemplate {
                 <!-- Search box -->
                 <?php $this->renderSearch(); ?>
             </div>
-        </div>
-        <?php
+        </div> <?php
     }
 
     /*************************************************************************************************/
@@ -187,8 +179,8 @@ class FreshMediaTemplate extends BaseTemplate {
     function renderPortals( $sidebar ) {
         if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
         if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
-        if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
-        ?>
+        if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true; ?>
+
         <div class="menu">
             <div class="container">
                 <ul class="mainMenu"><?php
@@ -210,8 +202,7 @@ class FreshMediaTemplate extends BaseTemplate {
                     } ?>
                 </ul>
             </div>
-        </div>
-        <?php
+        </div> <?php
     }
 
     /*************************************************************************************************/
@@ -219,8 +210,8 @@ class FreshMediaTemplate extends BaseTemplate {
      * Prints the search box.
      */
     function renderSearch() {
-        global $wgUseTwoButtonsSearchForm;
-        ?>
+        global $wgUseTwoButtonsSearchForm; ?>
+
         <form action="<?php $this->text('wgScript') ?>" id="searchform">
             <label for="searchInput"><?php $this->msg('search') ?></label>
             <input type='hidden' name="title" value="<?php $this->text('searchtitle') ?>"/> <?php
@@ -232,30 +223,26 @@ class FreshMediaTemplate extends BaseTemplate {
             } else { ?>
                 <div><a href="<?php $this->text('searchaction') ?>" rel="search"><?php $this->msg('powersearch-legend') ?></a></div> <?php
             } ?>
-        </form>
-        <?php
+        </form> <?php
     }
 
     /*************************************************************************************************/
     /**
      * Prints the content-actions menu.
      */
-    function contentActions() {
-        ?>
+    function contentActions() { ?>
         <ul> <?php
             foreach($this->data['content_actions'] as $key => $tab) {
                 echo "\n" . $this->makeListItem( $key, $tab );
             } ?>
-        </ul>
-        <?php
+        </ul> <?php
     }
 
     /*************************************************************************************************/
     /**
      * Prints the personal tools.
      */
-    function renderUserMenu() {
-        ?>
+    function renderUserMenu() { ?>
         <div class="user">
             <div class="container">
                 <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
@@ -265,15 +252,13 @@ class FreshMediaTemplate extends BaseTemplate {
                     } ?>
                 </ul>
             </div>
-        </div>
-        <?php
+        </div> <?php
     }
     /*************************************************************************************************/
     /**
      * Prints the toolbox.
      */
-    function toolbox() {
-        ?>
+    function toolbox() { ?>
         <li><span><?php $this->msg('toolbox') ?></span>
             <ul> <?php
                 foreach ( $this->getToolbox() as $key => $tbitem ) {
@@ -282,8 +267,7 @@ class FreshMediaTemplate extends BaseTemplate {
                 wfRunHooks( 'MonoBookTemplateToolboxEnd', array( &$this ) );
                 wfRunHooks( 'SkinTemplateToolboxEnd', array( &$this, true ) ); ?>
             </ul>
-        </li>
-        <?php
+        </li> <?php
     }
 
     /*************************************************************************************************/
@@ -307,8 +291,7 @@ class FreshMediaTemplate extends BaseTemplate {
      * @param $bar string
      * @param $cont array|string
      */
-    function customBox( $bar, $cont ) {
-        ?>
+    function customBox( $bar, $cont ) { ?>
         <li><span><?php $msg = wfMessage( $bar ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $bar ); ?></span> <?php
         if ( is_array( $cont ) ) { ?>
             <ul> <?php
@@ -320,7 +303,6 @@ class FreshMediaTemplate extends BaseTemplate {
             # allow raw HTML block to be defined by extensions
             print $cont;
         } ?>
-        </li>
-        <?php
+        </li> <?php
     }
 } // end of class
