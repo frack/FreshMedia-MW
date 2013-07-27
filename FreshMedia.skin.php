@@ -144,14 +144,17 @@ class FreshMediaTemplate extends BaseTemplate {
     /**
      * Render page header block
      */
-    function renderHeader() {
-        global $freshMediaSitename;
-        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename']; ?>
-
-        <header class="mainHeader noprint"> <?php
-            $this->renderUserMenu();
-            $this->renderTitle();
-            $this->renderPortals($this->data['sidebar']); ?>
+    function renderHeader() { ?>
+        <header class="mainHeader noprint">
+            <div class="user">
+                <div class="container"> <?php $this->renderUserMenu(); ?> </div>
+            </div>
+            <div class="title">
+                <div class="container"> <?php $this->renderTitle(); ?> </div>
+            </div>
+            <div class="menu">
+                <div class="container"> <?php $this->renderPortals($this->data['sidebar']); ?> </div>
+            </div>
         </header> <?php
     }
 
@@ -159,17 +162,15 @@ class FreshMediaTemplate extends BaseTemplate {
     /**
      * Render title block
      */
-    function renderTitle() { ?>
-        <div class="title">
-            <div class="container">
-                <h1> <?php
-                    $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
-                    echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName ); ?>
-                </h1>
-                <!-- Search box -->
-                <?php $this->renderSearch(); ?>
-            </div>
-        </div> <?php
+    function renderTitle() {
+        global $freshMediaSitename;
+        $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename']; ?>
+
+        <h1> <?php
+            $linkAttributes = Linker::tooltipAndAccesskeyAttribs('p-logo');
+            echo Html::element( 'a', array('href' => $this->data['nav_urls']['mainpage']['href']) + $linkAttributes, $headerSiteName ); ?>
+        </h1> <?php
+        $this->renderSearch();
     }
 
     /*************************************************************************************************/
@@ -181,28 +182,24 @@ class FreshMediaTemplate extends BaseTemplate {
         if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
         if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true; ?>
 
-        <div class="menu">
-            <div class="container">
-                <ul class="mainMenu"><?php
-                    foreach( $sidebar as $boxName => $content ) {
-                        if ( $content === false )
-                            continue;
+        <ul class="mainMenu"><?php
+            foreach( $sidebar as $boxName => $content ) {
+                if ( $content === false )
+                    continue;
 
-                        if ( $boxName == 'SEARCH' ) {
-                            // The searchbox is disabled, because we already have one in the header.
-                            // Uncomment the line below to enable it again.
-                            //$this->renderSearch();
-                        } elseif ( $boxName == 'TOOLBOX' ) {
-                            $this->toolbox();
-                        } elseif ( $boxName == 'LANGUAGES' ) {
-                            $this->languageBox();
-                        } else {
-                            $this->customBox( $boxName, $content );
-                        }
-                    } ?>
-                </ul>
-            </div>
-        </div> <?php
+                if ( $boxName == 'SEARCH' ) {
+                    // The searchbox is disabled, because we already have one in the header.
+                    // Uncomment the line below to enable it again.
+                    //$this->renderSearch();
+                } elseif ( $boxName == 'TOOLBOX' ) {
+                    $this->toolbox();
+                } elseif ( $boxName == 'LANGUAGES' ) {
+                    $this->languageBox();
+                } else {
+                    $this->customBox( $boxName, $content );
+                }
+            } ?>
+        </ul> <?php
     }
 
     /*************************************************************************************************/
@@ -243,16 +240,12 @@ class FreshMediaTemplate extends BaseTemplate {
      * Prints the personal tools.
      */
     function renderUserMenu() { ?>
-        <div class="user">
-            <div class="container">
-                <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
-                <ul class="userMenu" <?php $this->html('userlangattributes') ?>> <?php
-                    foreach($this->getPersonalTools() as $key => $item) {
-                            echo $this->makeListItem($key, $item);
-                    } ?>
-                </ul>
-            </div>
-        </div> <?php
+        <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
+        <ul class="userMenu" <?php $this->html('userlangattributes') ?>> <?php
+            foreach($this->getPersonalTools() as $key => $item) {
+                    echo $this->makeListItem($key, $item);
+            } ?>
+        </ul> <?php
     }
     /*************************************************************************************************/
     /**
