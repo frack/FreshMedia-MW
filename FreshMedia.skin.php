@@ -76,11 +76,11 @@ class FreshMediaTemplate extends BaseTemplate {
     function renderHeader() {
         echo Html::openElement('header', array('class' => 'mainHeader noprint'));
         echo Html::rawElement('div', array('class' => 'user'), Html::rawElement(
-            'div', array('class' => 'container'), $this->widgetUserMenu()););
+            'div', array('class' => 'container'), $this->widgetUserMenu()));
         echo Html::rawElement('div', array('class' => 'title'), Html::rawElement(
-            'div', array('class' => 'container'), $this->widgetTitle()););
+            'div', array('class' => 'container'), $this->widgetTitle()));
         echo Html::rawElement('div', array('class' => 'menu'), Html::rawElement(
-            'div', array('class' => 'container'), $this->widgetMainMenu($this->data['sidebar'])););
+            'div', array('class' => 'container'), $this->widgetMainMenu($this->data['sidebar'])));
         echo Html::closeElement('header');
     }
 
@@ -89,40 +89,51 @@ class FreshMediaTemplate extends BaseTemplate {
      * Renders the main content area
      */
     function renderContent() {
-        $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode(); ?>
+        $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
 
-        <div class="main-content">
-            <div class="container"> <?php
-                if ($this->data['sitenotice']) { ?>
-                    <div id="siteNotice"><?php $this->html('sitenotice') ?></div> <?php
-                } ?>
-                <h1 id="firstHeading" class="firstHeading" lang="<?php $this->html('pageLanguage'); ?>">
-                    <span dir="auto"><?php $this->html('title') ?></span>
-                </h1>
-                <?php echo $this->widgetContentActions(); ?>
-                <div id="bodyContent" class="mw-body">
-                    <div id="siteSub"><?php $this->msg('tagline') ?></div>
-                    <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div> <?php
-                        if ($this->data['undelete']) { ?>
-                            <div id="contentSub2"><?php $this->html('undelete') ?></div> <?php
-                        }
-                        if ($this->data['newtalk']) { ?>
-                            <div class="usermessage"><?php $this->html('newtalk') ?></div> <?php
-                        }
-                        if ($this->data['showjumplinks']) { ?>
-                            <div class="mw-jump"><?php $this->msg('jumpto') ?>
-                                <a href="#nav"><?php $this->msg('jumptonavigation') ?></a><?php $this->msg('comma-separator') ?>
-                                <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a>
-                            </div> <?php
-                        }
-                        // start content
-                        $this->html('bodytext');
-                        if ($this->data['catlinks']) { $this->html('catlinks'); }
-                        if ($this->data['dataAfterContent']) { $this->html('dataAfterContent');
-                    } ?>
-                </div> <!-- /bodyContent -->
-            </div> <!-- /container -->
-        </div> <!-- /main-content --> <?php
+        echo Html::openElement('div', array('class' => 'main-content'));
+        echo Html::openElement('div', array('class' => 'container'));
+        if ($this->data['sitenotice']) {
+            echo Html::rawElement('div', array('id' => 'siteNotice'), $this->data['sitenotice']);
+        }
+        echo Html::openElement('h1', array(
+            'id' => 'firstHeading',
+            'class' => 'firstHeading',
+            'lang' => $this->data['pageLanguage']));
+        echo Html::rawElement('span', array('dir' => 'auto'), $this->data['title']);
+        echo Html::closeElement('h1');
+        echo $this->widgetContentActions();
+
+        echo Html::openElement('div', array('id' => 'bodyContent', 'class' => 'mw-body'));
+        echo Html::rawElement('div', array('id' => 'siteSub'), $this->getMsg('tagline'));
+        echo Html::rawElement(
+            'div', array('id' => 'contentSub', 'dir' => $this->data['dir'], 'lang' => $this->data['lang']),
+            $this->data['subtitle']);
+        if ($this->data['undelete']) {
+            echo Html::rawElement('div', array('id' => 'contentSub2'), $this->data['undelete']);
+        }
+        if ($this->data['newtalk']) {
+            echo Html::rawElement('div', array('class' => 'usermessage'), $this->data['newtalk']);
+        }
+        if ($this->data['showjumplinks']) {
+            echo Html::openElement('div', array('class' => 'mw-jump'));
+            $this->msg('jumpto');
+            echo Html::rawElement('a', array('href' => '#nav'), $this->getMsg('jumptonavigation'));
+            $this->msg('comma-separator');
+            echo Html::rawElement('a', array('href' => '#searchInput'), $this->getMsg('jumptosearch'));
+            echo Html::closeElement('div');
+        }
+        // start content
+        $this->html('bodytext');
+        if ($this->data['catlinks']) {
+            $this->html('catlinks');
+        }
+        if ($this->data['dataAfterContent']) {
+            $this->html('dataAfterContent');
+        }
+        echo Html::closeElement('div'); // bodyContent
+        echo Html::closeElement('div'); // container
+        echo Html::closeElement('div'); // main-content
     }
 
     /*************************************************************************************************/
