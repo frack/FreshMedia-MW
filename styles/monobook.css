@@ -1,4 +1,10 @@
 /*
+** The 'monobook' style sheet of FreshMedia defines a majority of the monobook
+** styles, for the purpose of the main wiki content body. This is based on the
+** original 'monobook' stylesheet by Gabriel Wicke:
+*/
+
+/*
 ** MediaWiki 'monobook' style sheet for CSS2-capable browsers.
 ** Copyright Gabriel Wicke - http://wikidev.net/
 ** License: GPL (http://www.gnu.org/copyleft/gpl.html)
@@ -7,8 +13,6 @@
 ** and the Plone 2.0 styles, see http://plone.org/ (Alexander Limi,Joe Geldart & Tom Croucher,
 ** Michael Zeltner and Geir Bækholt)
 ** All you guys rock :)
-**
-** Small changes for Cavendish-MW by Serrano Pereira.
 */
 
 /* Font size:

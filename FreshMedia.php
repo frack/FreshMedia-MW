@@ -29,9 +29,9 @@ $wgExtensionMessagesFiles['FreshMedia'] = "{$skinPath}/FreshMedia.i18n.php";
 
 $wgResourceModules['skins.freshmedia'] = array(
     'styles' => array(
-        "{$skinName}/styles/basetemplate.css" => array( 'media' => 'screen' ),
-        "{$skinName}/styles/template.css" => array( 'media' => 'screen' ),
         "{$skinName}/styles/monobook.css" => array( 'media' => 'screen' ),
+        "{$skinName}/styles/structure.css" => array( 'media' => 'screen' ),
+        "{$skinName}/styles/skin.css" => array( 'media' => 'screen' ),
     ),
     'remoteBasePath' => &$GLOBALS['wgStylePath'],
     'localBasePath' => &$GLOBALS['wgStyleDirectory'],
