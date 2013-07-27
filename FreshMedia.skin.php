@@ -69,6 +69,10 @@ class FreshMediaTemplate extends BaseTemplate {
         wfRestoreWarnings();
     }
 
+    /*************************************************************************************************/
+    /**
+     * Renders the main content area
+     */
     function renderContent() {
         $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode(); ?>
 
@@ -109,7 +113,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Render the page footer
+     * Renders the page footer
      */
     function renderFooter() {
         $validFooterIcons = $this->getFooterIcons( "icononly" );
@@ -138,11 +142,11 @@ class FreshMediaTemplate extends BaseTemplate {
                 } ?>
             </div>
         </footer> <?php
-    } // end of renderFooter() method
+    }
 
     /*************************************************************************************************/
     /**
-     * Render page header block
+     * Renders the page header
      */
     function renderHeader() { ?>
         <header class="mainHeader noprint">
@@ -153,14 +157,14 @@ class FreshMediaTemplate extends BaseTemplate {
                 <div class="container"> <?php $this->renderTitle(); ?> </div>
             </div>
             <div class="menu">
-                <div class="container"> <?php $this->renderPortals($this->data['sidebar']); ?> </div>
+                <div class="container"> <?php $this->renderMainMenu($this->data['sidebar']); ?> </div>
             </div>
         </header> <?php
     }
 
     /*************************************************************************************************/
     /**
-     * Render title block
+     * Renders the title and contained search
      */
     function renderTitle() {
         global $freshMediaSitename;
@@ -175,36 +179,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * @param $sidebar array
-     */
-    function renderPortals( $sidebar ) {
-        if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
-        if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
-        if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true; ?>
-
-        <ul class="mainMenu"><?php
-            foreach( $sidebar as $boxName => $content ) {
-                if ( $content === false )
-                    continue;
-
-                if ( $boxName == 'SEARCH' ) {
-                    // The searchbox is disabled, because we already have one in the header.
-                    // Uncomment the line below to enable it again.
-                    //$this->renderSearch();
-                } elseif ( $boxName == 'TOOLBOX' ) {
-                    $this->toolbox();
-                } elseif ( $boxName == 'LANGUAGES' ) {
-                    $this->languageBox();
-                } else {
-                    $this->customBox( $boxName, $content );
-                }
-            } ?>
-        </ul> <?php
-    }
-
-    /*************************************************************************************************/
-    /**
-     * Prints the search box.
+     * Renders the search box.
      */
     function renderSearch() {
         global $wgUseTwoButtonsSearchForm; ?>
@@ -225,7 +200,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Prints the content-actions menu.
+     * Renders the content-actions menu.
      */
     function contentActions() { ?>
         <ul> <?php
@@ -237,7 +212,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Prints the personal tools.
+     * Renders the personal tools.
      */
     function renderUserMenu() { ?>
         <!-- <h2 class="hidden"><?php $this->msg('personaltools') ?></h2> -->
@@ -247,11 +222,42 @@ class FreshMediaTemplate extends BaseTemplate {
             } ?>
         </ul> <?php
     }
+
     /*************************************************************************************************/
     /**
-     * Prints the toolbox.
+     * Renders the main menu
+     * @param $portals array
      */
-    function toolbox() { ?>
+    function renderMainMenu( $portals ) {
+        if ( !isset( $portals['SEARCH'] ) ) $portals['SEARCH'] = true;
+        if ( !isset( $portals['TOOLBOX'] ) ) $portals['TOOLBOX'] = true;
+        if ( !isset( $portals['LANGUAGES'] ) ) $portals['LANGUAGES'] = true; ?>
+
+        <ul class="mainMenu"><?php
+            foreach( $portals as $boxName => $content ) {
+                if ( $content === false )
+                    continue;
+
+                if ( $boxName == 'SEARCH' ) {
+                    // The searchbox is disabled, because we already have one in the header.
+                    // Uncomment the line below to enable it again.
+                    //$this->renderSearch();
+                } elseif ( $boxName == 'TOOLBOX' ) {
+                    $this->renderToolbox();
+                } elseif ( $boxName == 'LANGUAGES' ) {
+                    $this->renderLanguageBox();
+                } else {
+                    $this->renderCustomMenuBox( $boxName, $content );
+                }
+            } ?>
+        </ul> <?php
+    }
+
+    /*************************************************************************************************/
+    /**
+     * Renders the toolbox menu section.
+     */
+    function renderToolbox() { ?>
         <li><span><?php $this->msg('toolbox') ?></span>
             <ul> <?php
                 foreach ( $this->getToolbox() as $key => $tbitem ) {
@@ -265,9 +271,9 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Prints the Language selection menu.
+     * Renders the Language selection menu.
      */
-    function languageBox() {
+    function renderLanguageBox() {
         if( $this->data['language_urls'] ) { ?>
             <li><span><?php $this->msg('otherlanguages') ?></span>
                 <ul> <?php
@@ -281,20 +287,21 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * @param $bar string
-     * @param $cont array|string
+     * Renders a custom content menu section.
+     * @param $name string
+     * @param $contents array|string
      */
-    function customBox( $bar, $cont ) { ?>
-        <li><span><?php $msg = wfMessage( $bar ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $bar ); ?></span> <?php
-        if ( is_array( $cont ) ) { ?>
+    function renderCustomMenuBox( $name, $contents ) { ?>
+        <li><span><?php $msg = wfMessage( $name ); echo htmlspecialchars( $msg->exists() ? $msg->text() : $name ); ?></span> <?php
+        if ( is_array( $contents ) ) { ?>
             <ul> <?php
-                foreach($cont as $key => $val) {
+                foreach($contents as $key => $val) {
                     echo $this->makeListItem($key, $val);
                 } ?>
             </ul> <?php
         } else {
             # allow raw HTML block to be defined by extensions
-            print $cont;
+            print $contents;
         } ?>
         </li> <?php
     }
