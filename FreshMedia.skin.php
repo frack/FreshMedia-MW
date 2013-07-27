@@ -73,40 +73,48 @@ class FreshMediaTemplate extends BaseTemplate {
     }
 
     function renderContent() {
+      $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
       ?>
-      <div id="mBody">
-          <div id="mainContent"> <!-- cavendishmw: s/column-content/mainContent/ -->
-              <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
-
-              <h1 id="firstHeading" class="firstHeading" lang="<?php
-                  $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
-                  $this->html( 'pageLanguage' );
-              ?>"><span dir="auto"><?php $this->html('title') ?></span></h1>
-              <?php $this->contentActions(); ?>
-              <div id="bodyContent" class="mw-body">
-                  <div id="siteSub"><?php $this->msg('tagline') ?></div>
-                  <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div>
-              <?php if($this->data['undelete']) { ?>
-                  <div id="contentSub2"><?php $this->html('undelete') ?></div>
-              <?php } ?><?php if($this->data['newtalk'] ) { ?>
-                  <div class="usermessage"><?php $this->html('newtalk')  ?></div>
-              <?php } ?><?php if($this->data['showjumplinks']) { ?>
-                  <div id="jump-to-nav" class="mw-jump"><?php $this->msg('jumpto') ?> <a href="#nav"><?php $this->msg('jumptonavigation') ?></a><?php $this->msg( 'comma-separator' ) ?><a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div>
-              <?php } ?>
-
-                  <!-- start content -->
-                  <?php $this->html('bodytext') ?>
-                  <?php if($this->data['catlinks']) { $this->html('catlinks'); } ?>
-                  <!-- end content -->
-
-                  <?php if($this->data['dataAfterContent']) { $this->html ('dataAfterContent'); } ?>
-                  <div class="visualClear"></div>
-              </div>
-          </div> <!-- /mainContent -->
-      </div> <!-- /mBody -->
+      <div class="main-content">
+        <div class="container"> <?php
+          if($this->data['sitenotice']) { ?>
+            <div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php
+          } ?>
+          <h1 id="firstHeading" class="firstHeading" lang="<?php $this->html( 'pageLanguage' ); ?>">
+            <span dir="auto"><?php $this->html('title') ?></span>
+          </h1>
+          <?php $this->contentActions(); ?>
+          <div id="bodyContent" class="mw-body">
+            <div id="siteSub"><?php $this->msg('tagline') ?></div>
+            <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div>
+            <?php
+              if($this->data['undelete']) { ?>
+                <div id="contentSub2"><?php $this->html('undelete') ?></div><?php
+              }
+              if($this->data['newtalk'] ) { ?>
+                <div class="usermessage"><?php $this->html('newtalk')  ?></div><?php
+              }
+              if($this->data['showjumplinks']) { ?>
+                <div class="mw-jump"><?php $this->msg('jumpto') ?>
+                  <a href="#nav"><?php $this->msg('jumptonavigation') ?></a><?php $this->msg( 'comma-separator' ) ?>
+                  <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a>
+                </div><?php
+              }
+              // start content
+              $this->html('bodytext');
+              if($this->data['catlinks']) { $this->html('catlinks'); }
+              if($this->data['dataAfterContent']) { $this->html ('dataAfterContent'); }
+            ?>
+          </div> <!-- /bodyContent -->
+        </div> <!-- /container -->
+      </div> <!-- /main-content -->
       <?php
     }
 
+    /*************************************************************************************************/
+    /**
+     * Render the page footer
+     */
     function renderFooter() {
       $validFooterIcons = $this->getFooterIcons( "icononly" );
       $validFooterLinks = $this->getFooterLinks( "flat" ); // Additional footer links
@@ -140,7 +148,9 @@ class FreshMediaTemplate extends BaseTemplate {
     } // end of renderFooter() method
 
     /*************************************************************************************************/
-
+    /**
+     * Render page header block
+     */
     function renderHeader() {
       global $freshMediaSitename;
       $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
@@ -148,7 +158,6 @@ class FreshMediaTemplate extends BaseTemplate {
 
       <header class="mainHeader noprint">
         <?php
-        // Display Personal tools.
         $this->renderUserMenu();
         $this->renderTitle();
         $this->renderPortals($this->data['sidebar']);

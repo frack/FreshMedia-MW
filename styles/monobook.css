@@ -11,24 +11,6 @@
 ** Small changes for Cavendish-MW by Serrano Pereira.
 */
 
-#column-content {
-	width: 100%;
-	float: right;
-	margin: 0 0 .6em -12.2em;
-	padding: 0;
-}
-#content {
-	margin: 2.8em 0 0 12.2em;
-	padding: 0 1em 1em 1em;
-	position: relative;
-}
-#content {
-	background: white;
-	color: black;
-	border: 1px solid #aaa;
-	border-right: none;
-	line-height: 1.5em;
-}
 /* Font size:
 ** We take advantage of keyword scaling- browsers won't go below 9px
 ** More at http://www.w3.org/2003/07/30-font-size
@@ -42,26 +24,11 @@ body {
 	padding: 0;
 }
 
-/* scale back up to a sane default */
-#globalWrapper {
-	font-size: 127%;
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
-
 /* general styles */
 
 table {
 	font-size: 100%;
 	color: black;
-	/* we don't want the bottom borders of <h2>s to be visible through
-	   floated tables */
-	background-color: white;
-}
-fieldset table {
-	/* but keep table layouts in forms clean... */
-	background: none;
 }
 a {
 	text-decoration: none;
@@ -206,11 +173,7 @@ q {
 	font-family: Times, "Times New Roman", serif;
 	font-style: italic;
 }
-/* disabled for now
-blockquote {
-	font-family: Times, "Times New Roman", serif;
-	font-style: italic;
-}*/
+
 code {
 	background-color: #f9f9f9;
 }
@@ -229,7 +192,7 @@ pre {
 #siteSub {
 	display: none;
 }
-#jump-to-nav {
+.mw-jump {
 	display: none;
 }
 
@@ -244,14 +207,8 @@ span.subpages {
 	display: block;
 }
 
-/* Some space under the headers in the content area */
-#bodyContent h1, #bodyContent h2 {
-	margin-bottom: .6em;
 }
-#bodyContent h3, #bodyContent h4, #bodyContent h5 {
-	margin-bottom: .3em;
-}
-#firstHeading {
+.firstHeading {
 	margin-bottom: .1em;
 	/* These two rules hack around bug 2013 (fix for more limited bug 11325).
 	   When bug 2013 is fixed properly, they should be removed. */
@@ -285,22 +242,6 @@ span.subpages {
 	padding: 5px;
 	margin-top: 1em;
 	clear: both;
-}
-/* currently unused, intended to be used by a metadata box
-in the bottom-right corner of the content area */
-.documentDescription {
-	/* The summary text describing the document */
-	font-weight: bold;
-	display: block;
-	margin: 1em 0;
-	line-height: 1.5em;
-}
-.documentByLine {
-	text-align: right;
-	font-size: 90%;
-	clear: both;
-	font-weight: normal;
-	color: #76797c;
 }
 
 /* emulate center */
@@ -579,31 +520,6 @@ table.rimage {
 }
 
 /*
-** Logo properties
-*/
-
-#p-logo {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 155px;
-	width: 12em;
-	overflow: visible;
-}
-#p-logo h5 {
-	display: none;
-}
-#p-logo a,
-#p-logo a:hover {
-	display: block;
-	height: 155px;
-	width: 12.2em;
-	background-repeat: no-repeat;
-	background-position: 35% 50% !important;
-	text-decoration: none;
-}
-
-/*
 ** Search portlet
 */
 input.searchButton {
@@ -634,35 +550,6 @@ input.searchButton {
  */
 #t-ispermalink, #t-iscite {
 	color: #999;
-}
-/*
-** footer
-*/
-#footer {
-	background-color: white;
-	border-top: 1px solid #fabd23;
-	border-bottom: 1px solid #fabd23;
-	margin: .6em 0 1em 0;
-	padding: .4em 0 1.2em 0;
-	text-align: center;
-	font-size: 90%;
-}
-#footer li {
-	display: inline;
-	margin: 0 1.3em;
-}
-#f-poweredbyico, #f-copyrightico {
-	margin: 0 8px;
-	position: relative;
-	top: -2px; /* Bump it up just a tad */
-}
-#f-poweredbyico {
-	float: right;
-	height: 1%;
-}
-#f-copyrightico {
-	float: left;
-	height: 1%;
 }
 
 .mw-htmlform-submit {
@@ -808,101 +695,6 @@ div#userloginForm .captcha {
 }
 
 #userloginlink a, #wpLoginattempt, #wpCreateaccount {
-	font-weight: bold;
-}
-
-/*
-** IE/Mac fixes, hope to find a validating way to move this
-** to a separate stylesheet. This would work but doesn't validate:
-** @import("IEMacFixes.css");
-*/
-/* tabs: border on the a, not the div */
-* > html #p-cactions li {
-  border: none;
-}
-* > html #p-cactions li a {
-	border: 1px solid #aaa;
-	border-bottom: none;
-}
-* > html #p-cactions li.selected a { border-color: #fabd23; }
-/* footer icons need a fixed width */
-* > html #f-poweredbyico,
-* > html #f-copyrightico { width: 88px; }
-* > html #bodyContent,
-* > html #bodyContent pre {
-	overflow-x: auto;
-	width: 100%;
-	padding-bottom: 25px;
-}
-
-/* more IE fixes */
-/* float/negative margin brokenness */
-* html #footer {margin-top: 0;}
-* html div.editsection { font-size: smaller; }
-#pagehistory li.selected { position: relative; }
-
-.redirectText {
-	font-size: 150%;
-	margin: 5px;
-}
-
-.printfooter {
-	display: none;
-}
-
-
-div.patrollink {
-	clear: both;
-}
-
-.sharedUploadNotice {
-	font-style: italic;
-}
-
-span.updatedmarker {
-	color: black;
-	background-color: #0f0;
-}
-
-.previewnote {
-	color: #c00;
-	margin-bottom: 1em;
-}
-
-.previewnote p {
-	text-indent: 3em;
-	margin: 0.8em 0;
-}
-
-.editExternally {
-	border: 1px solid gray;
-	background-color: #ffffff;
-	padding: 3px;
-	margin-top: 0.5em;
-	float: left;
-	font-size: small;
-	text-align: center;
-}
-.editExternallyHelp {
-	font-style: italic;
-	color: gray;
-}
-
-.toggle {
-	margin-left: 2em;
-	text-indent: -2em;
-}
-
-input#wpSummary {
-	width: 80%;
-}
-
-/* @bug 1714 */
-input#wpSave, input#wpDiff {
-	margin-right: 0.33em;
-}
-
-#wpSave {
 	font-weight: bold;
 }
 
