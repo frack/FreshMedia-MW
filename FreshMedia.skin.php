@@ -52,11 +52,11 @@ class SkinFreshMedia extends SkinTemplate {
  */
 class FreshMediaTemplate extends BaseTemplate {
     /**
-     * Outputs the entire contents of the page
+     * Renders the wiki page according to the formatting of the skin.
      */
     public function execute() {
         // Suppress warnings to prevent notices about missing indexes in $this->data
-        wfSuppressWarnings();
+        # wfSuppressWarnings();
 
         // Print the HTML head
         $this->html('headelement');
@@ -71,7 +71,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the page header
+     * Renders the page header.
      */
     function renderHeader() {
         echo Html::openElement('header', array('class' => 'mainHeader noprint'));
@@ -86,7 +86,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the main content area
+     * Renders the main content area.
      */
     function renderContent() {
         $this->data['pageLanguage'] = $this->getSkin()->getTitle()->getPageViewLanguage()->getCode();
@@ -138,7 +138,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the page footer
+     * Renders the page footer.
      */
     function renderFooter() {
         $validFooterIcons = $this->getFooterIcons("icononly");
@@ -169,7 +169,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the title and contained search
+     * Returns the title and contained search as a string.
      */
     function widgetTitle() {
         global $freshMediaSitename;
@@ -186,7 +186,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the search box.
+     * Returns the search box as a string.
      */
     function widgetSearch() {
         global $wgUseTwoButtonsSearchForm;
@@ -214,7 +214,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the personal tools.
+     * Returns the user menu (or login/creat account section) as a string.
      */
     function widgetUserMenu() {
         $output = '';
@@ -233,7 +233,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the main menu
+     * Renders the main menu as a string.
      * @param $portals array
      */
     function widgetMainMenu($portals) {
@@ -264,7 +264,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the toolbox menu section.
+     * Returns the toolbox menu section as a string.
      */
     function widgetToolbox() {
         $output = '';
@@ -287,7 +287,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the Language selection menu.
+     * Returns the language selection menu as a string.
      */
     function widgetLanguageBox() {
         $output = '';
@@ -306,7 +306,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders a custom content menu section.
+     * Returns a custom content menu section as a string.
      * @param $name string
      * @param $contents array|string
      */
@@ -330,7 +330,7 @@ class FreshMediaTemplate extends BaseTemplate {
 
     /*************************************************************************************************/
     /**
-     * Renders the content-actions menu.
+     * Returns the content-actions menu as a string.
      */
     function widgetContentActions() {
         $output = '';
