@@ -125,12 +125,8 @@ class FreshMediaTemplate extends BaseTemplate {
         }
         // start content
         $this->html('bodytext');
-        if ($this->data['catlinks']) {
-            $this->html('catlinks');
-        }
-        if ($this->data['dataAfterContent']) {
-            $this->html('dataAfterContent');
-        }
+        $this->html('catlinks');
+        $this->html('dataAfterContent');
         echo Html::closeElement('div'); // bodyContent
         echo Html::closeElement('div'); // container
         echo Html::closeElement('div'); // main-content
@@ -249,7 +245,7 @@ class FreshMediaTemplate extends BaseTemplate {
             if ($boxName == 'SEARCH') {
                 // The searchbox is disabled, because we already have one in the header.
                 // Uncomment the line below to enable it again.
-                //$this->renderSearch();
+                // $output .= $this->widgetSearch();
             } elseif ($boxName == 'TOOLBOX') {
                 $output .= $this->widgetToolbox();
             } elseif ($boxName == 'LANGUAGES') {
