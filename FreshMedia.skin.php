@@ -73,18 +73,15 @@ class FreshMediaTemplate extends BaseTemplate {
     /**
      * Renders the page header
      */
-    function renderHeader() { ?>
-        <header class="mainHeader noprint">
-            <div class="user">
-                <div class="container"> <?php $this->renderWidgetUserMenu(); ?> </div>
-            </div>
-            <div class="title">
-                <div class="container"> <?php $this->renderWidgetTitle(); ?> </div>
-            </div>
-            <div class="menu">
-                <div class="container"> <?php $this->renderWidgetMainMenu($this->data['sidebar']); ?> </div>
-            </div>
-        </header> <?php
+    function renderHeader() {
+        echo Html::openElement('header', array('class' => 'mainHeader noprint'));
+        echo Html::rawElement('div', array('class' => 'user'), Html::rawElement(
+            'div', array('class' => 'container'), $this->widgetUserMenu()););
+        echo Html::rawElement('div', array('class' => 'title'), Html::rawElement(
+            'div', array('class' => 'container'), $this->widgetTitle()););
+        echo Html::rawElement('div', array('class' => 'menu'), Html::rawElement(
+            'div', array('class' => 'container'), $this->widgetMainMenu($this->data['sidebar'])););
+        echo Html::closeElement('header');
     }
 
     /*************************************************************************************************/
@@ -102,7 +99,7 @@ class FreshMediaTemplate extends BaseTemplate {
                 <h1 id="firstHeading" class="firstHeading" lang="<?php $this->html('pageLanguage'); ?>">
                     <span dir="auto"><?php $this->html('title') ?></span>
                 </h1>
-                <?php $this->renderWidgetContentActions(); ?>
+                <?php echo $this->widgetContentActions(); ?>
                 <div id="bodyContent" class="mw-body">
                     <div id="siteSub"><?php $this->msg('tagline') ?></div>
                     <div id="contentSub"<?php $this->html('userlangattributes') ?>><?php $this->html('subtitle') ?></div> <?php
@@ -121,7 +118,7 @@ class FreshMediaTemplate extends BaseTemplate {
                         // start content
                         $this->html('bodytext');
                         if ($this->data['catlinks']) { $this->html('catlinks'); }
-                        if ($this->data['dataAfterContent']) { $this->html ('dataAfterContent');
+                        if ($this->data['dataAfterContent']) { $this->html('dataAfterContent');
                     } ?>
                 </div> <!-- /bodyContent -->
             </div> <!-- /container -->
@@ -134,76 +131,93 @@ class FreshMediaTemplate extends BaseTemplate {
      */
     function renderFooter() {
         $validFooterIcons = $this->getFooterIcons("icononly");
-        $validFooterLinks = $this->getFooterLinks("flat"); // Additional footer links ?>
+        $validFooterLinks = $this->getFooterLinks("flat"); // Additional footer links
 
-        <footer role="contentinfo"<?php $this->html('userlangattributes') ?>>
-            <div class="container"> <?php
-                foreach ($validFooterIcons as $blockName => $footerIcons) { ?>
-                    <div id="f-<?php echo htmlspecialchars($blockName); ?>ico"> <?php
-                        foreach ($footerIcons as $icon) {
-                            echo $this->getSkin()->makeFooterIcon($icon);
-                        } ?>
-                    </div> <?php
-                }
-                if (count($validFooterLinks) > 0) { ?>
-                    <ul id="f-list"> <?php
-                        foreach ($validFooterLinks as $aLink) { ?>
-                            <li id="<?php echo $aLink ?>"><?php $this->html($aLink) ?></li> <?php
-                        } ?>
-                    </ul> <?php
-                } ?>
-            </div>
-        </footer> <?php
+        echo Html::openElement('footer', array(
+            'role' => 'contentinfo',
+            'lang' => $this->data['lang'],
+            'dir' => $this->data['dir']));
+        echo Html::openElement('div', array('class' => 'container'));
+        foreach ($validFooterIcons as $blockName => $footerIcons) {
+            echo Html::openElement('div', array('id' => "f-{$blockName}ico"));
+            foreach ($footerIcons as $icon) {
+                echo $this->getSkin()->makeFooterIcon($icon);
+            }
+            echo Html::closeElement('div');
+        }
+        if (count($validFooterLinks) > 0) {
+            echo Html::openElement('ul', array('id' => 'f-list'));
+            foreach ($validFooterLinks as $aLink) {
+                echo Html::rawElement('li', array('id' => $aLink), $this->data[$aLink]);
+            }
+            echo Html::closeElement('ul');
+        }
+        echo Html::closeElement('div');
+        echo Html::closeElement('footer');
     }
 
     /*************************************************************************************************/
     /**
      * Renders the title and contained search
      */
-    function renderWidgetTitle() {
+    function widgetTitle() {
         global $freshMediaSitename;
+
         $headerSiteName = $freshMediaSitename ? $freshMediaSitename : $this->data['sitename'];
         $linkAttributes = array('href' => $this->data['nav_urls']['mainpage']['href']);
         $linkAttributes += Linker::tooltipAndAccesskeyAttribs('p-logo');
-        echo Html::rawElement('h1', null, Html::element('a', $linkAttributes, $headerSiteName));
-        $this->renderWidgetSearch();
+
+        $output = '';
+        $output .= Html::rawElement('h1', null, Html::element('a', $linkAttributes, $headerSiteName));
+        $output .= $this->widgetSearch();
+        return $output;
     }
 
     /*************************************************************************************************/
     /**
      * Renders the search box.
      */
-    function renderWidgetSearch() {
-        global $wgUseTwoButtonsSearchForm; ?>
+    function widgetSearch() {
+        global $wgUseTwoButtonsSearchForm;
 
-        <form action="<?php $this->text('wgScript') ?>" id="searchform">
-            <label for="searchInput"><?php $this->msg('search') ?></label>
-            <input type='hidden' name="title" value="<?php $this->text('searchtitle') ?>"/> <?php
-            echo $this->makeSearchInput(array("id" => "searchInput"));
-            echo $this->makeSearchButton("go", array("id" => "searchGoButton", "class" => "searchButton"));
-            if ($wgUseTwoButtonsSearchForm) {
-                echo "&#160";
-                echo $this->makeSearchButton("fulltext", array("id" => "mw-searchButton", "class" => "searchButton"));
-            } else { ?>
-                <div><a href="<?php $this->text('searchaction') ?>" rel="search"><?php $this->msg('powersearch-legend') ?></a></div> <?php
-            } ?>
-        </form> <?php
+        $output = '';
+        $output .= Html::openElement('form', array('action' => $this->data['wgScript'], 'id' => 'searchform'));
+        $output .= Html::element('label', array('for' => 'searchInput'), $this->getMsg('search'));
+        $output .= Html::element('input', array(
+            'type' => 'hidden',
+            'name' => 'title',
+            'value' => $this->data['searchtitle']));
+        $output .=  $this->makeSearchInput(array("id" => "searchInput"));
+        $output .=  $this->makeSearchButton("go", array("id" => "searchGoButton", "class" => "searchButton"));
+        if ($wgUseTwoButtonsSearchForm) {
+            $output .= $this->makeSearchButton("fulltext", array("id" => "mw-searchButton", "class" => "searchButton"));
+        } else {
+            $output .= Html::openElement('div');
+            $output .= Html::element('a', array('href' => $this->text('searchaction'), 'rel' => 'search'),
+                                     $this->getMsg('powersearch-legend'));
+            $output .= Html::closeElement('div');
+        }
+        $output .= Html::closeElement('form');
+        return $output;
     }
 
     /*************************************************************************************************/
     /**
      * Renders the personal tools.
      */
-    function renderWidgetUserMenu() {
+    function widgetUserMenu() {
+        $output = '';
         // Don't render the personal tools title
-        # echo Html::openElement('h2', array('class' => 'hidden'));
-        # $this->msg('personaltools');
-        # echo Html::closeElement('h2');
-        echo Html::openElement('ul', array('class' => 'userMenu', 'lang' => $this->data['userlang'], 'dir' => $this->data['dir']));
+        // $output .= Html::rawElement('h2', array('class' => 'hidden'), $this->getMsg('personaltools'));
+        $output .= Html::openElement('ul', array(
+            'class' => 'userMenu',
+            'lang' => $this->data['userlang'],
+            'dir' => $this->data['dir']));
         foreach ($this->getPersonalTools() as $key => $item) {
-                echo $this->makeListItem($key, $item);
+            $output .= $this->makeListItem($key, $item);
         }
-        echo Html::closeElement('ul');
+        $output .= Html::closeElement('ul');
+        return $output;
     }
 
     /*************************************************************************************************/
@@ -211,12 +225,13 @@ class FreshMediaTemplate extends BaseTemplate {
      * Renders the main menu
      * @param $portals array
      */
-    function renderWidgetMainMenu($portals) {
+    function widgetMainMenu($portals) {
         if (!isset($portals['SEARCH'])) $portals['SEARCH'] = true;
         if (!isset($portals['TOOLBOX'])) $portals['TOOLBOX'] = true;
         if (!isset($portals['LANGUAGES'])) $portals['LANGUAGES'] = true;
 
-        echo Html::openElement('ul', array('class' => 'mainMenu'));
+        $output = '';
+        $output .= Html::openElement('ul', array('class' => 'mainMenu'));
         foreach ($portals as $boxName => $content) {
             if ($content === false)
                 continue;
@@ -225,48 +240,57 @@ class FreshMediaTemplate extends BaseTemplate {
                 // Uncomment the line below to enable it again.
                 //$this->renderSearch();
             } elseif ($boxName == 'TOOLBOX') {
-                $this->renderWidgetToolbox();
+                $output .= $this->widgetToolbox();
             } elseif ($boxName == 'LANGUAGES') {
-                $this->renderWidgetLanguageBox();
+                $output .= $this->widgetLanguageBox();
             } else {
-                $this->renderWidgetCustomMenuBox($boxName, $content);
+                $output .= $this->widgetCustomMenuBox($boxName, $content);
             }
         }
-        echo Html::closeElement('ul');
+        $output .= Html::closeElement('ul');
+        return $output;
     }
 
     /*************************************************************************************************/
     /**
      * Renders the toolbox menu section.
      */
-    function renderWidgetToolbox() {
-        echo Html::openElement('li');
-        echo Html::element('span', null, $this->msg('toolbox'));
-        echo Html::openElement('ul');
+    function widgetToolbox() {
+        $output = '';
+        $output .= Html::openElement('li');
+        $output .= Html::element('span', null, $this->getMsg('toolbox'));
+        $output .= Html::openElement('ul');
         foreach ($this->getToolbox() as $key => $tbitem) {
-            echo $this->makeListItem($key, $tbitem);
+            $output .= $this->makeListItem($key, $tbitem);
         }
-        wfRunHooks('MonoBookTemplateToolboxEnd', array(&$this));
+        //XXX(Elmer): This is a dirty hack to capture the 'echo' performed by hooks
+        ob_start();
         wfRunHooks('SkinTemplateToolboxEnd', array(&$this, true));
-        echo Html::closeElement('ul');
-        echo Html::closeElement('li');
+        $output .= ob_get_contents();
+        ob_end_clean();
+        // End of dirty hack
+        $output .= Html::closeElement('ul');
+        $output .= Html::closeElement('li');
+        return $output;
     }
 
     /*************************************************************************************************/
     /**
      * Renders the Language selection menu.
      */
-    function renderWidgetLanguageBox() {
+    function widgetLanguageBox() {
+        $output = '';
         if ($this->data['language_urls']) {
-            echo Html::openElement('li');
-            echo Html::element('span', null, $this->msg('otherlanguages'));
-            echo Html::openElement('ul');
+            $output .= Html::openElement('li');
+            $output .= Html::element('span', null, $this->msg('otherlanguages'));
+            $output .= Html::openElement('ul');
             foreach ($this->data['language_urls'] as $key => $langlink) {
-                echo $this->makeListItem($key, $langlink);
+                $output .= $this->makeListItem($key, $langlink);
             }
-            echo Html::closeElement('ul');
-            echo Html::closeElement('li');
+            $output .= Html::closeElement('ul');
+            $output .= Html::closeElement('li');
         }
+        return $output;
     }
 
     /*************************************************************************************************/
@@ -275,31 +299,35 @@ class FreshMediaTemplate extends BaseTemplate {
      * @param $name string
      * @param $contents array|string
      */
-    function renderWidgetCustomMenuBox($name, $contents) {
+    function widgetCustomMenuBox($name, $contents) {
         $msg = wfMessage($name);
-        echo Html::openElement('li');
-        echo Html::element('span', null, htmlspecialchars($msg->exists() ? $msg->text() : $name));
+        $output = '';
+        $output .= Html::openElement('li');
+        $output .= Html::element('span', null, htmlspecialchars($msg->exists() ? $msg->text() : $name));
         if (is_array($contents)) {
-            echo Html::openElement('ul');
+            $output .= Html::openElement('ul');
             foreach ($contents as $key => $val) {
-                echo $this->makeListItem($key, $val);
+                $output .= $this->makeListItem($key, $val);
             }
-            echo Html::closeElement('ul');
+            $output .= Html::closeElement('ul');
         } else {
-            print $contents;
+            $output .= $contents;
         }
-        echo Html::closeElement('li');
+        $output .= Html::closeElement('li');
+        return $output;
     }
 
     /*************************************************************************************************/
     /**
      * Renders the content-actions menu.
      */
-    function renderWidgetContentActions() {
-        echo Html::openElement('ul');
+    function widgetContentActions() {
+        $output = '';
+        $output .= Html::openElement('ul');
         foreach ($this->data['content_actions'] as $key => $tab) {
-            echo "\n" . $this->makeListItem($key, $tab);
+            $output .= "\n" . $this->makeListItem($key, $tab);
         }
-        echo Html::closeElement('ul');
+        $output .= Html::closeElement('ul');
+        return $output;
     }
 } // end of FreshMediaTemplate class
