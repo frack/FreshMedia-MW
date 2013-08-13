@@ -74,7 +74,7 @@ class FreshMediaTemplate extends BaseTemplate {
      * Renders the page header.
      */
     function renderHeader() {
-        echo Html::openElement('header', array('class' => 'mainHeader noprint'));
+        echo Html::openElement('header', array('class' => 'main-header noprint'));
         echo Html::rawElement('div', array('class' => 'user'), Html::rawElement(
             'div', array('class' => 'container'), $this->widgetUserMenu()));
         echo Html::rawElement('div', array('class' => 'title'), Html::rawElement(
@@ -97,14 +97,14 @@ class FreshMediaTemplate extends BaseTemplate {
             echo Html::rawElement('div', array('id' => 'siteNotice'), $this->data['sitenotice']);
         }
         echo Html::openElement('h1', array(
-            'id' => 'firstHeading',
-            'class' => 'firstHeading',
+            'id' => 'first-heading',
+            'class' => 'first-heading',
             'lang' => $this->data['pageLanguage']));
         echo Html::rawElement('span', array('dir' => 'auto'), $this->data['title']);
         echo Html::closeElement('h1');
         echo $this->widgetContentActions();
 
-        echo Html::openElement('div', array('id' => 'bodyContent', 'class' => 'mw-body'));
+        echo Html::openElement('div', array('id' => 'bodyContent', 'class' => 'body-content'));
         echo Html::rawElement('div', array('id' => 'siteSub'), $this->getMsg('tagline'));
         echo Html::rawElement(
             'div', array('id' => 'contentSub', 'dir' => $this->data['dir'], 'lang' => $this->data['lang']),
@@ -195,9 +195,9 @@ class FreshMediaTemplate extends BaseTemplate {
             'name' => 'title',
             'value' => $this->data['searchtitle']));
         $output .=  $this->makeSearchInput(array("id" => "searchInput"));
-        $output .=  $this->makeSearchButton("go", array("id" => "searchGoButton", "class" => "searchButton"));
+        $output .=  $this->makeSearchButton("go", array("id" => "searchGoButton", "class" => "search-button"));
         if ($wgUseTwoButtonsSearchForm) {
-            $output .= $this->makeSearchButton("fulltext", array("id" => "mw-searchButton", "class" => "searchButton"));
+            $output .= $this->makeSearchButton("fulltext", array("id" => "mw-searchButton", "class" => "search-button"));
         } else {
             $output .= Html::openElement('div');
             $output .= Html::element('a', array('href' => $this->text('searchaction'), 'rel' => 'search'),
@@ -217,7 +217,7 @@ class FreshMediaTemplate extends BaseTemplate {
         // Don't render the personal tools title
         // $output .= Html::rawElement('h2', array('class' => 'hidden'), $this->getMsg('personaltools'));
         $output .= Html::openElement('ul', array(
-            'class' => 'userMenu',
+            'class' => 'user-menu',
             'lang' => $this->data['userlang'],
             'dir' => $this->data['dir']));
         foreach ($this->getPersonalTools() as $key => $item) {
@@ -238,7 +238,7 @@ class FreshMediaTemplate extends BaseTemplate {
         if (!isset($portals['LANGUAGES'])) $portals['LANGUAGES'] = true;
 
         $output = '';
-        $output .= Html::openElement('ul', array('class' => 'mainMenu'));
+        $output .= Html::openElement('ul', array('class' => 'main-menu'));
         foreach ($portals as $boxName => $content) {
             if ($content === false)
                 continue;

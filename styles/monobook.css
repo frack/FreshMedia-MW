@@ -212,7 +212,7 @@ span.subpages {
 }
 
 }
-.firstHeading {
+.first-heading {
 	margin-bottom: .1em;
 	/* These two rules hack around bug 2013 (fix for more limited bug 11325).
 	   When bug 2013 is fixed properly, they should be removed. */
@@ -429,69 +429,69 @@ table.rimage {
 ** keep the whitespace in front of the ^=, hides rule from konqueror
 ** this is css3, the validator doesn't like it when validating as css2
 */
-#bodyContent a.external,
-#bodyContent a.external[href ^="gopher://"] {
+.body-content a.external,
+.body-content a.external[href ^="gopher://"] {
     /* @embed */
 	background: url(../images/external.png) center right no-repeat;
 	padding: 0 13px;
 }
-.rtl #bodyContent a.external,
-.rtl #bodyContent a.external[href ^="gopher://"] {
+.rtl .body-content a.external,
+.rtl .body-content a.external[href ^="gopher://"] {
     /* @embed */
 	background-image: url(../images/external-rtl.png);
 }
-#bodyContent a.external[href ^="https://"],
+.body-content a.external[href ^="https://"],
 .link-https {
     /* @embed */
 	background: url(../images/lock-icon.png) center right no-repeat;
 	padding: 0 16px;
 }
-#bodyContent a.external[href ^="mailto:"],
+.body-content a.external[href ^="mailto:"],
 .link-mailto {
     /* @embed */
 	background: url(../images/mail-icon.png) center right no-repeat;
 	padding: 0 18px;
 }
-#bodyContent a.external[href ^="news://"] {
+.body-content a.external[href ^="news://"] {
     /* @embed */
 	background: url(../images/news-icon.png) center right no-repeat;
 	padding: 0 18px;
 }
-#bodyContent a.external[href ^="ftp://"],
+.body-content a.external[href ^="ftp://"],
 .link-ftp {
     /* @embed */
 	background: url(../images/file-icon.png) center right no-repeat;
 	padding: 0 18px;
 }
-#bodyContent a.external[href ^="irc://"],
+.body-content a.external[href ^="irc://"],
 .link-irc {
     /* @embed */
 	background: url(../images/discussionitem-icon.gif) center right no-repeat;
 	padding: 0 18px;
 }
-#bodyContent a.external[href $=".ogg"], #bodyContent a.external[href $=".OGG"],
-#bodyContent a.external[href $=".mid"], #bodyContent a.external[href $=".MID"],
-#bodyContent a.external[href $=".midi"], #bodyContent a.external[href $=".MIDI"],
-#bodyContent a.external[href $=".mp3"], #bodyContent a.external[href $=".MP3"],
-#bodyContent a.external[href $=".wav"], #bodyContent a.external[href $=".WAV"],
-#bodyContent a.external[href $=".wma"], #bodyContent a.external[href $=".WMA"],
+.body-content a.external[href $=".ogg"], .body-content a.external[href $=".OGG"],
+.body-content a.external[href $=".mid"], .body-content a.external[href $=".MID"],
+.body-content a.external[href $=".midi"], .body-content a.external[href $=".MIDI"],
+.body-content a.external[href $=".mp3"], .body-content a.external[href $=".MP3"],
+.body-content a.external[href $=".wav"], .body-content a.external[href $=".WAV"],
+.body-content a.external[href $=".wma"], .body-content a.external[href $=".WMA"],
 .link-audio {
     /* @embed */
 	background: url("../images/audio-icon.png") center right no-repeat;
 	padding: 0 13px;
 }
-#bodyContent a.external[href $=".ogm"], #bodyContent a.external[href $=".OGM"],
-#bodyContent a.external[href $=".avi"], #bodyContent a.external[href $=".AVI"],
-#bodyContent a.external[href $=".mpeg"], #bodyContent a.external[href $=".MPEG"],
-#bodyContent a.external[href $=".mpg"], #bodyContent a.external[href $=".MPG"],
+.body-content a.external[href $=".ogm"], .body-content a.external[href $=".OGM"],
+.body-content a.external[href $=".avi"], .body-content a.external[href $=".AVI"],
+.body-content a.external[href $=".mpeg"], .body-content a.external[href $=".MPEG"],
+.body-content a.external[href $=".mpg"], .body-content a.external[href $=".MPG"],
 .link-video {
     /* @embed */
 	background: url("../images/video-icon.png") center right no-repeat;
 	padding: 0 13px;
 }
-#bodyContent a.external[href $=".pdf"], #bodyContent a.external[href $=".PDF"],
-#bodyContent a.external[href *=".pdf#"], #bodyContent a.external[href *=".PDF#"],
-#bodyContent a.external[href *=".pdf?"], #bodyContent a.external[href *=".PDF?"],
+.body-content a.external[href $=".pdf"], .body-content a.external[href $=".PDF"],
+.body-content a.external[href *=".pdf#"], .body-content a.external[href *=".PDF#"],
+.body-content a.external[href *=".pdf?"], .body-content a.external[href *=".PDF?"],
 .link-document {
     /* @embed */
 	background: url("../images/document-icon.png") center right no-repeat;
@@ -499,7 +499,7 @@ table.rimage {
 }
 
 /* for rtl wikis */
-.rtl #bodyContent a.external {
+.rtl .body-content a.external {
 	background-position: left;
 	padding-right: 0;
 }
@@ -510,16 +510,16 @@ table.rimage {
 }
 
 /* correction for ltr wikis */
-.ltr #bodyContent a.external {
+.ltr .body-content a.external {
 	padding-left: 0;
 }
 
 /* disable interwiki styling */
-#bodyContent a.extiw,
-#bodyContent a.extiw:active {
+.body-content a.extiw,
+.body-content a.extiw:active {
 	color: #36b;
 }
-#bodyContent a.external {
+.body-content a.external {
 	color: #36b;
 }
 
@@ -538,14 +538,6 @@ input.searchButton {
 #searchInput {
 	width: 10.9em;
 	margin: 0;
-	font-size: 95%;
-}
-#p-search .pBody {
-	padding: .5em .4em .4em .4em;
-	text-align: center;
-}
-#p-search #searchform div div {
-	margin-top: .4em;
 	font-size: 95%;
 }
 
